@@ -66,24 +66,18 @@ rule totalSupplyNotLessThanSingleUserBalance(method f, address user) {
 	calldataarg args;
 	uint256 totalSupplyBefore = totalSupply(e);
     uint256 userBalanceBefore = balanceOf(e, user);
-    uint256 senderBalanceBefore = balanceOf(e, e.msg.sender);
-    uint256 totalBefore = userBalanceBefore + senderBalanceBefore;
-
-    require userBalanceBefore + senderBalanceBefore >= senderBalanceBefore;
-    require totalSupplyBefore >= userBalanceBefore && totalSupplyBefore >= senderBalanceBefore; 
-    require totalSupplyBefore >= userBalanceBefore + senderBalanceBefore;
+    require totalSupplyBefore >= userBalanceBefore;
     
     f(e, args);
 
     uint256 totalSupplyAfter = totalSupply(e);
     uint256 userBalanceAfter = balanceOf(e, user);
-    // uint256 senderBalanceAfter = balanceOf(e, e.msg.sender);
-    // uint256 totalAfter = userBalanceAfter + senderBalanceAfter;
+   
 
-    assert f.selector != transferFrom(address, address, uint256).selector => (totalSupplyAfter >= userBalanceAfter &&  userBalanceAfter!= userBalanceBefore) || userBalanceAfter == userBalanceBefore, 
+    assert (f.selector == burn(address, uint256).selector || f.selector == mint(address, uint256).selector) => (totalSupplyAfter >= userBalanceAfter &&  userBalanceAfter!= userBalanceBefore) || userBalanceAfter == userBalanceBefore, 
         "a user's balance is exceeding the total supply of token";
 
-    assert f.selector == transferFrom(address, address, uint256).selector => (totalSupplyAfter >= userBalanceAfter) || (userBalanceAfter > totalSupplyBefore), 
+    assert (f.selector != burn(address, uint256).selector && f.selector != mint(address, uint256).selector) => ((totalSupplyBefore == totalSupplyAfter) && ((totalSupplyAfter >= userBalanceAfter) || (userBalanceAfter > totalSupplyBefore))), 
         "a user's balance is exceeding the total supply of token";
     
 
