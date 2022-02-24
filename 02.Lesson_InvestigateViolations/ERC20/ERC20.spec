@@ -37,6 +37,7 @@ rule integrityOfIncreaseAllowance(address spender, uint256 amount) {
 
 	assert amount > 0 => (allowanceAfter > allowanceBefore), "allowance did not increase";
     // Can you think of a way to strengthen this assert to account to all possible amounts?
+    // assert allowanceAfter >= allowanceBefore
 }
 
 
@@ -65,10 +66,30 @@ rule totalSupplyNotLessThanSingleUserBalance(method f, address user) {
 	calldataarg args;
 	uint256 totalSupplyBefore = totalSupply(e);
     uint256 userBalanceBefore = balanceOf(e, user);
+    uint256 senderBalanceBefore = balanceOf(e, e.msg.sender);
+    uint256 totalBefore = userBalanceBefore + senderBalanceBefore;
+
+    require userBalanceBefore + senderBalanceBefore >= senderBalanceBefore;
+    require totalSupplyBefore >= userBalanceBefore && totalSupplyBefore >= senderBalanceBefore; 
+    require totalSupplyBefore >= userBalanceBefore + senderBalanceBefore;
+    
     f(e, args);
+
     uint256 totalSupplyAfter = totalSupply(e);
     uint256 userBalanceAfter = balanceOf(e, user);
-	assert totalSupplyBefore >= userBalanceBefore => 
-            totalSupplyAfter >= userBalanceAfter,
+    // uint256 senderBalanceAfter = balanceOf(e, e.msg.sender);
+    // uint256 totalAfter = userBalanceAfter + senderBalanceAfter;
+
+    assert f.selector != transferFrom(address, address, uint256).selector => (totalSupplyAfter >= userBalanceAfter &&  userBalanceAfter!= userBalanceBefore) || userBalanceAfter == userBalanceBefore, 
         "a user's balance is exceeding the total supply of token";
+
+    assert f.selector == transferFrom(address, address, uint256).selector => (totalSupplyAfter >= userBalanceAfter) || (userBalanceAfter > totalSupplyBefore), 
+        "a user's balance is exceeding the total supply of token";
+    
+
+	
 }
+
+// case which supler < after is 
+
+// supplyAfter < userBalanceAfter =>  totalSupplyBefore < userBalanceBefore

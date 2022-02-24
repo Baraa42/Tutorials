@@ -157,6 +157,7 @@ contract ERC20 is IERC20, IERC20Metadata {
         override
         returns (bool)
     {
+        
         _approve(msg.sender, spender, amount);
         return true;
     }
@@ -180,6 +181,10 @@ contract ERC20 is IERC20, IERC20Metadata {
         uint256 amount
     ) public virtual override returns (bool) {
         uint256 currentAllowance = _allowances[sender][msg.sender];
+        require(
+            currentAllowance >= amount,
+            "ERC20: transfer amount exceeds allowance"
+        ); //@note: was missing requirement statement
         unchecked {
             _approve(sender, msg.sender, currentAllowance - amount);
         }
@@ -353,7 +358,7 @@ contract ERC20 is IERC20, IERC20Metadata {
     ) internal virtual {
         require(owner != address(0), "ERC20: approve from the zero address");
         require(spender != address(0), "ERC20: approve to the zero address");
-        _allowances[owner][spender] = amount*9;
+        _allowances[owner][spender] = amount; //@note: was amount*9 
         emit Approval(owner, spender, amount);
     }
 
