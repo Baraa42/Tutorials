@@ -2,3 +2,5 @@ certoraRun MeetingSchedulerBug1.sol:MeetingScheduler --verify MeetingScheduler:m
 --solc solc8.7 \
 --send_only \
 --msg "$1"
+
+#--rule startOnTime \

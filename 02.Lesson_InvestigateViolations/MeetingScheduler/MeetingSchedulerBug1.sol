@@ -52,7 +52,7 @@ contract MeetingScheduler is IMeetingScheduler {
     }
 
     function scheduleMeeting(
-        uint256 meetingId,
+        uint256 meetingId, 
         uint256 startTime,
         uint256 endTime
     ) external override {
@@ -84,6 +84,10 @@ contract MeetingScheduler is IMeetingScheduler {
             block.timestamp < scheduledMeeting.endTime,
             "can't start a meeting after its end time"
         );
+        require(
+            block.timestamp >= scheduledMeeting.startTime,
+            "can't start a meeting after its end time"
+        ); //@note: added require on startTime
         meetings[meetingId].status = MeetingStatus.STARTED;
     }
 
