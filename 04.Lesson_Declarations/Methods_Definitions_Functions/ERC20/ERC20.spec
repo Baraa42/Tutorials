@@ -6,14 +6,44 @@
  * we specify (or selecting) to address one particular path - when the f.selector was scheduleMeeting.
  */
 
+methods{
+    // name implementation does not require any context to get successfully executed
+    name() returns (string) envfree
+    // symbol implementation does not require any context to get successfully executed
+    symbol() returns (string) envfree
+    // decimals implementation does not require any context to get successfully executed
+    decimals() returns (uint8) envfree
+    // totalSupply implementation does not require any context to get successfully executed
+    totalSupply() returns (uint256) envfree
+    // balanceOf implementation does not require any context to get successfully executed
+    balanceOf(address) returns (uint256) envfree
+    // allowance implementation does not require any context to get successfully execute
+    allowance(address, address) returns (uint256) envfree
+    // approve implementation uses msg.sender, info that's encapsulated in the environment
+    approve(address, uint256) returns (bool) 
+    // increaseAllowance implementation uses msg.sender, info that's encapsulated in the environment
+    increaseAllowance(address, uint256) returns (bool) 
+    // decreaseAllowance implementation uses msg.sender, info that's encapsulated in the environment
+    decreaseAllowance(address, uint256) returns (bool) 
+    // transfer's implementation uses msg.sender, info that's encapsulated in the environment
+    transfer(address, uint256) returns (bool)
+	// transferFrom's implementation uses msg.sender, info that's encapsulated in the environment
+    transferFrom(address, address, uint256) returns (bool)
+
+   
+	
+    
+
+}
+
 // Checks that the sum of sender and recipient accounts remains the same after transfer(), i.e. assets doesn't disappear nor created out of thin air
 rule integrityOfTransfer(address recipient, uint256 amount) {
 	env e;
-	uint256 balanceSenderBefore = balanceOf(e, e.msg.sender);
-	uint256 balanceRecipientBefore = balanceOf(e, recipient);
+	uint256 balanceSenderBefore = balanceOf(e.msg.sender);
+	uint256 balanceRecipientBefore = balanceOf(recipient);
 	transfer(e, recipient, amount);
-	uint256 balanceSenderAfter = balanceOf(e, e.msg.sender);
-	uint256 balanceRecipientAfter = balanceOf(e, recipient);
+	uint256 balanceSenderAfter = balanceOf(e.msg.sender);
+	uint256 balanceRecipientAfter = balanceOf(recipient);
 
 	assert balanceRecipientBefore + balanceSenderBefore == balanceSenderAfter + balanceRecipientAfter, "the total funds before and after a transfer should remain the constant";
 }
@@ -23,9 +53,9 @@ rule integrityOfTransfer(address recipient, uint256 amount) {
 rule integrityOfTransferFrom(address owner, address recipient, uint256 amount) {
 	env e;
     require owner != recipient; // why is that necessary? try commenting this line out and see what happens
-	uint256 allowanceBefore = allowance(e, owner, e.msg.sender);
+	uint256 allowanceBefore = allowance(owner, e.msg.sender);
 	transferFrom(e, owner, recipient, amount);
-	uint256 allowanceAfter = allowance(e, owner, e.msg.sender);
+	uint256 allowanceAfter = allowance(owner, e.msg.sender);
     
 	assert allowanceBefore >= allowanceAfter, "allowance musn't increase after using the allowance to pay on behalf of somebody else";
 }
@@ -34,9 +64,9 @@ rule integrityOfTransferFrom(address owner, address recipient, uint256 amount) {
 // Checks that increaseAllowance() increases allowance of spender
 rule integrityOfIncreaseAllowance(address spender, uint256 amount) {
 	env e;
-	uint256 allowanceBefore = allowance(e, e.msg.sender, spender);
+	uint256 allowanceBefore = allowance(e.msg.sender, spender);
 	increaseAllowance(e, spender, amount);
-	uint256 allowanceAfter = allowance(e, e.msg.sender, spender);
+	uint256 allowanceAfter = allowance(e.msg.sender, spender);
 
 	assert amount > 0 => (allowanceAfter > allowanceBefore), "allowance did not increase";
     // Can you think of a way to strengthen this assert to account to all possible amounts?
@@ -47,14 +77,14 @@ rule integrityOfIncreaseAllowance(address spender, uint256 amount) {
 rule balanceChangesFromCertainFunctions(method f, address user){
     env e;
     calldataarg args;
-    uint256 userBalanceBefore = balanceOf(e, user);
+    uint256 userBalanceBefore = balanceOf(user);
     f(e, args);
-    uint256 userBalanceAfter = balanceOf(e, user);
+    uint256 userBalanceAfter = balanceOf(user);
 
     assert userBalanceBefore != userBalanceAfter => 
         (f.selector == transfer(address, uint256).selector ||
-         f.selector == transferFrom(address, address, uint256).selector),
-         "user's balance changed as a result function other than transfer(), transderFrom(), mint(), burn()";
+         f.selector == transferFrom(address, address, uint256).selector) ,
+         "user's balance changed as a result function other than transfer(), transferFrom(), mint() or burn()";
 }
 
 /* possible exercise to understand why it fails */
