@@ -94,12 +94,12 @@ rule onceBlockedNotOut(method f, address voter){
     // uint256 age; bool registeredBefore; bool voted; uint256 vote_attempts; bool blocked_before;
     // age, registeredBefore, voted, vote_attempts, blocked_before = getFullVoterDetails(voter);
     bool registeredBefore = voterRegistered(voter);
-    bool blocked_before = blockedVoter(voter);
+    bool blocked_before = voterBlocked(voter);
     require blocked_before => registeredBefore;
     f(e, args);
     // bool registeredAfter; bool blocked_after;
     // age, registeredAfter, voted, vote_attempts, blocked_after = getFullVoterDetails(voter);
-    bool blocked_after = blockedVoter(voter);
+    bool blocked_after = voterBlocked(voter);
     assert blocked_before => blocked_after, "the specified user got out of the blocked users' list";
 }
 
