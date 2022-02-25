@@ -55,8 +55,6 @@ rule onceBlackListedNotOut(method f, address voter) {
 	uint256 vote_attempts;
 	bool black_listed_Before;
 	age, registeredBefore, voted, vote_attempts, black_listed_Before = getFullVoterDetails(e, voter);
-	// added this line, if he is not registered then he cannot be blacklisted
-    require registeredBefore;
 	f(e, args);
 	bool registeredAfter;
 	bool black_listed_After;

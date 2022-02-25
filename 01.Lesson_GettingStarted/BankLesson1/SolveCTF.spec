@@ -14,16 +14,15 @@
 
 **/
 
-rule solve() {
+rule solve(uint32 seed) {
 	// The env type represents the EVM parameters passed in every
 	//   call (msg.*, tx.*, block.* variables in solidity).
 	env e;
-	bool solved = isSolved();
+	uint16 solution = roll(e, seed);
 	
 	
 	// Verify that the funds of msg.sender is the sum of her funds before and the amount deposited.
-	assert(!solved, "Solved");
+	assert(solution != 1073741824 && solution != 2147483648 && solution != 3221225472  );
 }
 
-assert(!solved, "Solved");
 } 
