@@ -1,2 +1,2 @@
-certoraRun TicketDepot.sol --verify TicketDepot:sanity.spec \
+certoraRun TicketDepot.sol:TicketDepot --verify TicketDepot:sanity.spec \
 --solc solc6.12

@@ -8,7 +8,7 @@ contract TicketDepot {
 		uint64 ticketPrice;  
 		uint16 ticketsRemaining;  
 		mapping(uint16 => address) attendees;  
-	} 
+	}
 
 	struct Offering{  
 		address buyer;
@@ -29,6 +29,15 @@ contract TicketDepot {
         numEvents = 0;
 	} 
 
+	// function getEventOwner(uint16 _eventID) public view returns(address) {
+	// 	require(_eventID <=numEvents  && numEvents>0);
+	// 	return eventsMap[_eventID].owner;
+	// }
+
+	// function getRemainingTickets(uint16 _eventID) public view returns(uint16) {
+	// 	require(_eventID <=numEvents && numEvents>0 );
+	// 	return eventsMap[_eventID].ticketsRemaining;
+	// }
     // creates an event with the specified number of tickets and price for sale
 	function createEvent(uint64 _ticketPrice, uint16 _ticketsAvailable) public returns (uint16 eventID){         
 		numEvents++;  

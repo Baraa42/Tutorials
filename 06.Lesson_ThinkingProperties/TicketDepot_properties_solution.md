@@ -23,8 +23,8 @@ First, let us define the states of the system:
 
 7. ***Variable transition*** - `eventsMap[eventId].owner` and `eventsMap[eventId].ticketPrice` and cannot be changed if state is `defEventCreated`.
 8. ***Variable transition*** - `eventsMap[eventId].owner` and `eventsMap[eventId].ticketPrice` and can only change if state is `defEventNonCreated` after a call to `createEvent`.
-9. ***Variable transition*** - `eventsMap[eventId].ticketsRemaining`  cannot be increased if state is `defEventCreated`.
-10. ***Variable transition*** - `eventsMap[eventId].ticketsRemaining`  can only be increased if state is `defEventNonCreated` after a call to `createEvent`.
+9. ***Variable transition*** - `eventsMap[eventId].ticketsRemaining`  cannot be decreased if state is `defEventCreated`.
+10. ***Variable transition*** - `eventsMap[eventId].ticketsRemaining`  can only be decreased if state is `defEventNonCreated` after a call to `createEvent`.
 
 
 10. ***High-level*** - No way to buy new tickets if `eventsMap[eventId].ticketsRemaining` is 0. 
