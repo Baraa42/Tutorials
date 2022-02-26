@@ -10,3 +10,7 @@
 - prize = getPrizeById(id) is non-increasing after a function call.
 - winner = getAuctionWinner(id) can only change after function call if function is : bid or close or newAuction 
 
+## Additional Ideas
+- For each user e1, e2 : e1 call function f => newBalance(e2) >= oldBalance(e2)
+- payment = getAuctionPayment(id) only changes after a call to newAuction or close.
+
