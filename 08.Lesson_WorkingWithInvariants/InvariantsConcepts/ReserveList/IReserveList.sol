@@ -5,7 +5,7 @@ interface IReserveList {
     /**
      * @dev Details on assets in reserve mapping
      * @param id - a unique id generated for the asset. 
-     * @note that the given id to a reserve asset is its location (index) in the underlying map
+     * @note: that the given id to a reserve asset is its location (index) in the underlying map
      * @param token - the token address
      * @param fee - a constant fee associated with trading this asset
      */ 
