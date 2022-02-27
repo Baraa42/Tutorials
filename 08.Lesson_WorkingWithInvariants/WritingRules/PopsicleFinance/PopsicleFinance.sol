@@ -83,6 +83,18 @@ contract PopsicleFinance is ERC20 {
         totalFeesEarnedPerShare += 1;
     }
 
+    function getTotalFeesEarnedPerShare() public  returns(uint256) {
+        return totalFeesEarnedPerShare;
+    }
+
+    function getFeesCollectedPerShare(address account) public  returns(uint256) {
+        return accounts[account].feesCollectedPerShare;
+    }
+
+    function contractBalance() public  returns(uint256) {
+        return address(this).balance;
+    }
+
     // added by certora for use in a spec - returns the deserved rewards collected up to this point.
     function assetsOf(address user) public view returns(uint) {
         return accounts[user].Rewards + balances[user] * (totalFeesEarnedPerShare - accounts[user].feesCollectedPerShare);

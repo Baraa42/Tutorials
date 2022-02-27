@@ -25,6 +25,7 @@ contract SpartaProtocolPool is ERC20 {
     address token0;
     address token1;
     address owner;
+    bool init;
 
     uint token0Amount;
     uint token1Amount;
@@ -41,6 +42,8 @@ contract SpartaProtocolPool is ERC20 {
     // the creator receives 100,000 LP tokens (shares) in exchange.
     function init_pool() public {
         require(msg.sender == owner);
+        require(!init);
+        init = true;
         token0Amount = IERC20(token0).balanceOf(address(this));
         token1Amount = IERC20(token1).balanceOf(address(this));
         
@@ -52,14 +55,20 @@ contract SpartaProtocolPool is ERC20 {
     // adds liquidity to a pool
     function add_liquidity() public returns (uint) {
         // calculate added token0, token1 amounts
-        uint added0 = IERC20(token0).balanceOf(address(this)) - token0Amount;
-        uint added1 = IERC20(token1).balanceOf(address(this)) - token1Amount;
+        uint added0 = IERC20(token0).balanceOf(address(this)) - token0Amount; // X_new - X_old = x
+        uint added1 = IERC20(token1).balanceOf(address(this)) - token1Amount;// Y_new - Y_old = y
 
         // deposit to LP token
-        uint units = mint(msg.sender, added0, added1);
-        uint LP_total_supply = total;
+        uint units = mint(msg.sender, added0, added1); // increase balance user and total by units 
+        uint LP_total_supply = total; // 
 
-        K = (K / (LP_total_supply-units)) * (LP_total_supply);
+        // K *=  new_total / old_total 
+        // new_total / old_total = 1 + to_mint / old_total
+        // ideal world to_mint = old_total * x / (X_old) = old_total * y / (Y_old)
+        // new_total / old_total = 1 + x / X_old = 1 + y / Y_old = 1 + a
+        // X_new * Y_new = (X_old + x) * (Y_old + y) = X_old * Y_old * (1 + a)**2
+        // K_new = K_old * (1 + a)
+        K = (K / (LP_total_supply-units)) * (LP_total_supply); 
         
         sync();
         return units;
@@ -101,28 +110,46 @@ contract SpartaProtocolPool is ERC20 {
         return token1;
     }
 
-    function sync() public {
+    function getToken0Amount() public view returns (uint) {
+        return token0Amount;
+    }
+
+    function getToken1Amount() public view returns (uint) {
+        return token1Amount;
+    }
+
+    function getK() public view returns (uint) {
+        return K;
+    }
+
+    function getInit() public view returns (bool) {
+        return init;
+    }
+
+
+
+    function sync() internal {
         token0Amount = IERC20(token0).balanceOf(address(this));
         token1Amount = IERC20(token1).balanceOf(address(this));
     }
     
     // mints LP tokens to user
     function mint(address user, uint amount0, uint amount1) internal returns (uint){
-        uint totalBalance0 = IERC20(token0).balanceOf(address(this));
-        uint totalBalance1 = IERC20(token1).balanceOf(address(this));
+        uint totalBalance0 = IERC20(token0).balanceOf(address(this)); // X_new
+        uint totalBalance1 = IERC20(token1).balanceOf(address(this)); // Y_new
 
         // minting deserved from supplying token 0 or 1 is the portion of the user's 
         // supplied liquidity out of the total assets in the pool before the addition.
-        uint mint_0 = total * amount0 / (totalBalance0-amount0);
-        uint mint_1 = total * amount1 / (totalBalance1-amount1);
+        uint mint_0 = total * amount0 / (totalBalance0-amount0); // m0 = total * x / (X_old)
+        uint mint_1 = total * amount1 / (totalBalance1-amount1); // m1 = total * y / (Y_old)
 
         // the liquidity providers are being incentivised to supply liquidity based on the existing ratio.
         // if the user choose to deviate from the ratio, they will get LP tokens according to the lower of the 2 amounts.
         // e.g. if the pool at the moment has 1:3 ratio between ETH and USDC, and the user want to supply lquidity
         // of 3 ETH and 10 USDC, they will receieve 3 LP tokens, as if they supplied 3 ETH and 9 USDC.
-        uint to_mint = mint_0 < mint_1 ? mint_0 : mint_1;
-        balances[user] += to_mint;
-        total += to_mint;
+        uint to_mint = mint_0 < mint_1 ? mint_0 : mint_1; // min m0, m1
+        balances[user] += to_mint; // increase balance user
+        total += to_mint; // increaste total + to_mint
         return to_mint;
     }
 
