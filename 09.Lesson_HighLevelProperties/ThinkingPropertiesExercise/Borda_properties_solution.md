@@ -16,7 +16,8 @@ First, let us define the states of the system:
 1. ***Valid state*** - `defContenderNonRegistered` => `_contender[contender].registered` == 0 && `_contender[contender].age` == 0 && `_contender[contender].points` == 0 .
 2. ***Valid state*** - `defContenderRegistered` => `_contender[contender].registered` == 1.
 3. ***Valid state*** - `defVoterNonRegistered` => `_voters[voter].registered`  == 0 && `_voters[voter].age` == 0 && `_voters[voter].voted` == 0 .
-.....
+
+...........
 
 
 4. ***State transitions*** - The only allowed state transitions are : 
@@ -33,10 +34,11 @@ First, let us define the states of the system:
 
 9. ***High-level*** - No way to vote more than once. 
 10. ***High-level*** - No way to vote if blacklisted. 
+11. ***High-level*** - No way to decrease a contender points. 
 
 
 
-11. ***Unit tests***  : 
+12. ***Unit tests***  : 
     - `registerContender()` correctly changes state of `_contenders[msg.sender]` if state is `defContenderNonRegistered`.
     - `registerVoter()` correctly changes state of `_voters[msg.sender]` if state is `defVoterNonRegistered`.
     .......
@@ -59,7 +61,7 @@ First, let us define the states of the system:
 
 - Properties 1 to 4 are high priority because if they fail, the idea of the system fails.
 - Properties 7 and 8 are high priority because if they fail a voter/contender can fail to have his right to register.
-- Properties 9 and 10 is high priority because if they are essential to the system correct function, the rules described must be followed.
+- Properties 9 and 11 is high priority because if they are essential to the system correct function, the rules described must be followed.
 
 
 ### Low Priority:
