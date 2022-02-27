@@ -4,18 +4,7 @@ methods{
     getTotalFunds() returns uint256 envfree
 }
 
-rule can_withdraw() {
-    env e;
 
-    uint256 balance_before = getEthBalance(e.msg.sender);
-    uint256 reserves       = getEthBalance(currentContract);
-    uint256 funds_before   = getFunds(e.msg.sender);
-
-    withdraw@withrevert(e);
-
-    uint256 balance_after  = getEthBalance(e.msg.sender);
-    assert balance_after == balance_before + funds_before;
-}
 
 invariant totalFunds_GE_single_user_funds()
     // A quantifier is followed by a declaration of a variable to say "for all users, $exp$ should hold"
@@ -46,3 +35,18 @@ hook Sstore funds[KEY address user] uint256 new_balance
 
 invariant totalFunds_GE_to_sum_of_all_funds()
     getTotalFunds() >= sum_of_all_funds()
+
+
+rule can_withdraw() {
+    env e;
+
+    uint256 balance_before = getEthBalance(e.msg.sender);
+    uint256 reserves       = getEthBalance(currentContract);
+    uint256 funds_before   = getFunds(e.msg.sender);
+
+    withdraw@withrevert(e);
+
+
+    uint256 balance_after  = getEthBalance(e.msg.sender);
+    assert balance_after == balance_before + funds_before;
+}

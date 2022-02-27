@@ -1,4 +1,4 @@
-# Properties For MeetingScheduler
+# Properties For TicketDepot
 
 First, let us define the states of the system:
 

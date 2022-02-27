@@ -1,4 +1,4 @@
-# Properties For Auction
+# Properties For Popsicle
 
 
 1. ***Valid state*** - `owner()` is not 0.
