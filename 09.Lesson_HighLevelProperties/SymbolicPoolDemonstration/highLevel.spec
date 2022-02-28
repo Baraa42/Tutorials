@@ -11,7 +11,7 @@ using SymbolicFlashLoanReceiver as flashLoanReceiver
     sharesToAmount(uint256 amount) returns (uint256) envfree    
     calcPremium(uint256 amount) returns (uint256) envfree    
 
-    // for checing call backs to the pool's function
+    // for checking call backs to the pool's function
     deposit(uint256) returns(uint256)  => DISPATCHER(true)
     withdraw(uint256) returns (uint256)  => DISPATCHER(true)
     flashLoan(address, uint256)  => DISPATCHER(true)
