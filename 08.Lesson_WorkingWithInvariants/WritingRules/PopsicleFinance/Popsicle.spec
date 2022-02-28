@@ -22,15 +22,6 @@ methods {
     
 }
 
-// 1. totalFeesEarnedPerShare >= feesCollectedPerShare -- Need getters for this
-// 2. totalFeesEarnedPerShare non-decreasing
-// 3. total Ether in contract >= assetsOf(user)
-// 4. deposit increase total supply ok
-// 5. withdraw decrease total supply ok
-
-// Step :
-// 3. Write invariants for the sum for all users
-// 4. Copy already made code 
 
 invariant totalFunds_GE_single_user_funds()
     // A quantifier is followed by a declaration of a variable to say "for all users, $exp$ should hold"
@@ -55,20 +46,6 @@ hook Sstore balances[KEY address user] uint256 new_balance
 
 invariant totalFunds_GE_to_sum_of_all_funds()
     totalSupply() >= sum_of_all_funds()
-
-
-// rule can_withdraw() {
-//     env e;
-
-//     uint256 balance_before = getEthBalance(e.msg.sender);
-//     uint256 reserves       = getEthBalance(currentContract);
-//     uint256 funds_before   = getFunds(e.msg.sender);
-
-//     withdraw@withrevert(e);
-
-//     uint256 balance_after  = getEthBalance(e.msg.sender);
-//     assert balance_after == balance_before + funds_before;
-// }
 
 
 
