@@ -1,6 +1,5 @@
 # Properties For Pool
 
-First, let us define the states of the Meeting system:
 
 1. ***Valid state*** - `totalSupply` >= `balanceOf(user)` for all users.
 2. ***Valid state*** - `totalSupply` >= `sumUsersBalances`.
