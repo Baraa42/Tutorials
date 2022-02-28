@@ -1,7 +1,7 @@
 using Asset_ERC20 as underlying
 using SymbolicFlashLoanReceiver as flashLoanReceiver
 
- methods
+methods
 {
     // pool's erc20 function
     balanceOf(address) returns(uint256) envfree

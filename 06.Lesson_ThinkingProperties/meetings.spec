@@ -110,5 +110,5 @@ rule monotonousIncreasingNumOfParticipants(method f, uint256 meetingId) {
 
 	assert numOfParticipantsBefore <= numOfParticipantsAfter, "the number of participants decreased as a result of a function call";
     assert numOfParticipantsAfter <= 1 +  numOfParticipantsBefore, "wrong increase in number of participants";
-    assert numOfParticipantsBefore < numOfParticipantsAfter => f.selector == joinMeeting(uint256).selector, "wrong functino incresed number of participants";
+    assert numOfParticipantsBefore < numOfParticipantsAfter => f.selector == joinMeeting(uint256).selector, "wrong function increased number of participants";
 }

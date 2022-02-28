@@ -35,7 +35,7 @@ contract TicketDepot {
 	}
 
 	function getTicketOwner(uint16 _eventId, uint16 _attendeeId) public view returns(address) {
-		return eventsMap[_eventID].attendees[_attendeeId];
+		return eventsMap[_eventId].attendees[_attendeeId];
 	}
 
 	function getRemainingTickets(uint16 _eventID) public view returns(uint16) {
