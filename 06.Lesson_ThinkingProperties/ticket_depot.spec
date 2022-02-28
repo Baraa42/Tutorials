@@ -33,7 +33,7 @@ rule checkTransitionNonCreatedToCreated(method f, uint16 eventId) {
     require ownerBefore == 0;
 	f(e, args);
     address ownerAfter = getEventOwner(eventId);
-	assert ownerAfter != 0 => f.selector == createEvent(uint64,uint16).selector , "the owner of changed from 0 to !0 through a function other then createEvent()";
+	assert ownerAfter != 0 => f.selector == createEvent(uint64,uint16).selector , "the owner  changed from 0 to !0 through a function other then createEvent()";
 }
 
 // Checks that tickets are non decreasing 
@@ -69,7 +69,7 @@ rule checkTicketsRemainingChange(method f, uint16 eventId, uint16 attendeeId) {
     require ownerBefore != 0 && ticketOwnerBefore != 0;
 	f(e, args);
     address ticketOwnerAfter = getTicketOwner(eventId, attendeeId);
-	assert ticketOwnerBefore != ticketOwnerAfter => f.selector == buyOfferedTicket(uint16,uint16,address).selector , "Number of tickets increased!";
+	assert ticketOwnerBefore != ticketOwnerAfter => f.selector == buyOfferedTicket(uint16,uint16,address).selector , "owner illegaly changed!";
 }
 
 
