@@ -2,5 +2,6 @@ certoraRun SpartaProtocolPool.sol:SpartaProtocolPool --verify SpartaProtocolPool
 --solc solc8.6 \
 --optimistic_loop \
 --send_only \
---rule_sanity \
 --msg "$1" \
+# --rule_sanity \
+

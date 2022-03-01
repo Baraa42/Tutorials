@@ -6,10 +6,11 @@ methods{
 
 
 
-invariant totalFunds_GE_single_user_funds()
+invariant totalFunds_GE_single_user_funds(address user)
     // A quantifier is followed by a declaration of a variable to say "for all users, $exp$ should hold"
     // Quantifiers are raising the complexity of of the run by a considerable amount, so often using them will result in a timeout
-    forall address user. getTotalFunds() >= getFunds(user)
+    // forall address user. getTotalFunds() >= getFunds(user)
+    getTotalFunds() >= getFunds(user)
 
 /* A declaration of a ghost.
  * A ghost is, in esssence, an uninterpeted function (remember lesson 3?).

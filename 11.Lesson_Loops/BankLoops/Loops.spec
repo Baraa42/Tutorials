@@ -49,9 +49,12 @@ rule whoChangedMyGhost(method f) {
 	f(e,args);
 	mathint after = sumAllFunds();
 	assert(before == after);
+    assert(false);
+    
 }
 
 
 // The total funds in the bank is equal to the sum of all individual funds
 invariant sumFunds() 
 	sumAllFunds() == getTotalFunds()
+

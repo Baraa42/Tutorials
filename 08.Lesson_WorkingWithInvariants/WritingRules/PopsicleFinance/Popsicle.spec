@@ -75,6 +75,7 @@ rule totalFeesEarnedPerShareIncreasing(method f) {
     f(e, args);
     uint256 totalAfter = getTotalFeesEarnedPerShare();
     assert totalAfter >= totalBefore, "TotalFees decreased";
+    // assert false;
     
 }
 
@@ -85,6 +86,7 @@ rule IntegrityOfDepositForTotalSupply() {
     deposit(e);
     uint256 totalAfter = totalSupply();
     assert totalAfter == totalBefore + e.msg.value, "TotalFees decreased";
+    // assert false;
 }
 
 
@@ -96,6 +98,7 @@ rule IntegrityOfDepositForUser(address user) {
     require e.msg.sender == user;
     uint256 totalAfter = balanceOf(user);
     assert totalAfter == totalBefore + e.msg.value, "TotalFees decreased";
+    // assert false;
 }
 
 rule IntegrityOfWithdraw(uint256 amount) {
@@ -105,6 +108,7 @@ rule IntegrityOfWithdraw(uint256 amount) {
     withdraw(e, amount);
     uint256 totalAfter = totalSupply();
     assert totalAfter == totalBefore - amount, "TotalFees decreased";
+    // assert false;
 }
 
 rule IntegrityOfWithdrawForUser(address user, uint256 amount) {
@@ -115,4 +119,5 @@ rule IntegrityOfWithdrawForUser(address user, uint256 amount) {
     require e.msg.sender == user;
     uint256 totalAfter = balanceOf(user);
     assert totalAfter == totalBefore - amount, "TotalFees decreased";
+    // assert false;
 }

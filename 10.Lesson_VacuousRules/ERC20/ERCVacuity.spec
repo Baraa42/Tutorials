@@ -131,3 +131,9 @@ rule mintBurnInverse(address user, uint256 amount) {
 }
 
 // now going back to Spartan and Popsicle ...
+// After running with --rule_sanity :
+/*        RESULTS
+- Popsicle :
+    --Sum Of All users Didnt pass
+    -- No reverting path which is by design
+    -- totalFeesEarnedPerShareIncreasing also failed which is normal since there is no function in the code that reduce it
