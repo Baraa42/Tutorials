@@ -58,3 +58,6 @@ rule whoChangedMyGhost(method f) {
 invariant sumFunds() 
 	sumAllFunds() == getTotalFunds()
 
+rule checkSumFunds() {
+    assert sumAllFunds() == getTotalFunds();
+}
